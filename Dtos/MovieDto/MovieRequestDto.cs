@@ -2,16 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MovieApi.Dtos.GenreDto;
+using MovieApi.Dtos.ReviewDto;
+using MovieApi.Models;
 
-namespace MovieApi.Models
+namespace MovieApi.Dtos.MovieDto
 {
-    public class Movie
+    public class MovieRequestDto
     {
-        public int Id { get; set; } 
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty ;
         public DateTime ReleasedOn { get; set;}
-        public List<Genre> Genres { get; set; } = new List<Genre>();
-        public List<Review> Reviews { get; set; } = new List<Review>();
+        public List<GenreRequestDto> Genres { get; set; } = new List<GenreRequestDto>();
+
     }
 }

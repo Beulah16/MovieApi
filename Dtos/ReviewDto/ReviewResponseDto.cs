@@ -1,18 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MovieApi.Models
+namespace MovieApi.Dtos.ReviewDto
 {
-    public class Review
+    public class ReviewResponseDto
     {
         public int Id { get; set; }
-        [Column(TypeName = "decimal(18,2)")]
         public decimal Rating { get; set; }
         public string Content { get; set; }= string.Empty;
         public int MovieId { get; set; }
-        public Movie? Movie { get; set; }
     }
 }

@@ -2,13 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MovieApi.Dtos.MovieDto;
 
-namespace MovieApi.Models
+namespace MovieApi.Dtos.GenreDto
 {
-    public class Genre
+    public  class GenreResponseDto
     {
         public int Id { get; set; }
         public string Type { get; set; } = string.Empty;
-        public List<Movie> Movies{ get; set; } = new List<Movie>();
+        public List<MovieForGenreResponseDto> Movies{ get; set; } = new List<MovieForGenreResponseDto>();
     }
 }
