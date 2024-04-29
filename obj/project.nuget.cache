@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "dgSpecHash": "/TeOBCi6hUu9HuAwQuRa3NT3tpFUDajij8gPxNGYDwsn02Tt72WBLbTPUcaUFKtmB/I3uajoFRevOXN+GLeJvA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\BEULAH\\OneDrive\\Desktop\\Code Projects\\ASP_Demo_Projects\\MovieApi\\MovieApi.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\BEULAH\\.nuget\\packages\\microsoft.aspnetcore.openapi\\8.0.0\\microsoft.aspnetcore.openapi.8.0.0.nupkg.sha512",
+    "C:\\Users\\BEULAH\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
+    "C:\\Users\\BEULAH\\.nuget\\packages\\microsoft.openapi\\1.4.3\\microsoft.openapi.1.4.3.nupkg.sha512",
+    "C:\\Users\\BEULAH\\.nuget\\packages\\swashbuckle.aspnetcore\\6.4.0\\swashbuckle.aspnetcore.6.4.0.nupkg.sha512",
+    "C:\\Users\\BEULAH\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.4.0\\swashbuckle.aspnetcore.swagger.6.4.0.nupkg.sha512",
+    "C:\\Users\\BEULAH\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.4.0\\swashbuckle.aspnetcore.swaggergen.6.4.0.nupkg.sha512",
+    "C:\\Users\\BEULAH\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.4.0\\swashbuckle.aspnetcore.swaggerui.6.4.0.nupkg.sha512"
+  ],
+  "logs": []
+}
