@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using MovieApi.Data;
+using MovieApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,8 +12,9 @@ builder.Services.AddControllers();
 
 
 builder.Services.AddDbContext<MovieDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Connection")));
-
-
+builder.Services.AddIdentityApiEndpoints<User>()
+                .AddEntityFrameworkStores<MovieDbContext>();
+builder.Services.AddAuthorization();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -24,6 +26,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.MapControllers();
+app.MapIdentityApi<User>().WithTags("User");
 
 app.Run();
 

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MovieApi.Dtos.GenreDto;
 using MovieApi.Dtos.ReviewDto;
 using MovieApi.Models;
 
@@ -13,7 +12,6 @@ namespace MovieApi.Dtos.MovieDto
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty ;
         public DateTime ReleasedOn { get; set;}
-        public List<GenreRequestDto> Genres { get; set; } = new List<GenreRequestDto>();
 
     }
 }

@@ -136,3 +136,9 @@ C:\Users\BEULAH\OneDrive\Desktop\Code Projects\ASP_Demo_Projects\MovieApi\obj\De
 C:\Users\BEULAH\OneDrive\Desktop\Code Projects\ASP_Demo_Projects\MovieApi\obj\Debug\net8.0\MovieApi.pdb
 C:\Users\BEULAH\OneDrive\Desktop\Code Projects\ASP_Demo_Projects\MovieApi\obj\Debug\net8.0\MovieApi.genruntimeconfig.cache
 C:\Users\BEULAH\OneDrive\Desktop\Code Projects\ASP_Demo_Projects\MovieApi\obj\Debug\net8.0\ref\MovieApi.dll
+C:\Users\BEULAH\OneDrive\Desktop\Code Projects\ASP_Demo_Projects\MovieApi\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\BEULAH\OneDrive\Desktop\Code Projects\ASP_Demo_Projects\MovieApi\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\BEULAH\OneDrive\Desktop\Code Projects\ASP_Demo_Projects\MovieApi\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\BEULAH\OneDrive\Desktop\Code Projects\ASP_Demo_Projects\MovieApi\bin\Debug\net8.0\Microsoft.Extensions.Identity.Core.dll
+C:\Users\BEULAH\OneDrive\Desktop\Code Projects\ASP_Demo_Projects\MovieApi\bin\Debug\net8.0\Microsoft.Extensions.Identity.Stores.dll
+C:\Users\BEULAH\OneDrive\Desktop\Code Projects\ASP_Demo_Projects\MovieApi\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
