@@ -19,5 +19,18 @@ namespace MovieApi.Mappers
                 Genre = movieDto.Genre
             };
         }
+
+        public static MovieResponseDto ReadMovie(this Movie movie)
+        {
+            return new MovieResponseDto
+            {
+                Id = movie.Id,
+                Title = movie.Title,
+                Description = movie.Description,
+                ReleasedOn = movie.ReleasedOn,
+                Genre = movie.Genre,
+                Reviews = movie.Reviews.Select(r => r.ReadReview()).ToList()
+            };
+        }
     }
 }

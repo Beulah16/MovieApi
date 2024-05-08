@@ -24,21 +24,24 @@ namespace MovieApi.Controllers
             return CreatedAtAction(nameof(ReadById), new { id = movie.Id }, movie);
         }
 
+        
         [HttpGet]
         public async Task<IActionResult> ReadAll()
         {
-            var movie = await _dbContext.Movies.ToListAsync();
+            var movie = await _dbContext.Movies.Include(r => r.Reviews)
+                .Select(m => m.ReadMovie()).ToListAsync();
 
             return Ok(movie);
         }
 
+        
         [HttpGet("{id}")]
         public async Task<IActionResult> ReadById(int id)
         {
-            var movie = await _dbContext.Movies.FindAsync(id);
-            if (movie == null) return BadRequest("Movie does not exist");
+            var movie = await _dbContext.Movies.Include(c => c.Reviews).FirstOrDefaultAsync(x => id == x.Id);
+            if (movie == null) return NotFound("Movie does not exist");
 
-            return Ok(movie);
+            return Ok(movie.ReadMovie());
         }
 
 
@@ -46,7 +49,7 @@ namespace MovieApi.Controllers
         public async Task<IActionResult> Update(int id, [FromBody] MovieRequestDto updateMovie)
         {
             var movie = await _dbContext.Movies.FindAsync(id);
-            if (movie == null) return BadRequest("Movie does not exist");
+            if (movie == null) return NotFound("Movie does not exist");
 
             movie.Title = updateMovie.Title;
             movie.Description = updateMovie.Description;
@@ -61,7 +64,7 @@ namespace MovieApi.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var movie = await _dbContext.Movies.FindAsync(id);
-            if (movie == null) return BadRequest("Movie does not exist");
+            if (movie == null) return NotFound("Movie does not exist");
 
             _dbContext.Movies.Remove(movie);
             await _dbContext.SaveChangesAsync();

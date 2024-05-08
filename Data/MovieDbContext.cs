@@ -10,5 +10,7 @@ namespace MovieApi.Data
     public class MovieDbContext(DbContextOptions options) : DbContext(options)
     {
         public DbSet<Movie> Movies { get; set;}
+        public DbSet<Review> Reviews { get; set;}
+
     }
 }
