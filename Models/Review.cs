@@ -13,9 +13,10 @@ namespace MovieApi.Models
         public int Id { get; set; }
         public int MovieId { get; set; }
         public string MovieTitle { get; set; } = string.Empty;
-        [Column (TypeName = "decimal(18,2)")]
-        public decimal Rating { get; set; }        
-        public DateTime PostedOn { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal Rating { get; set; }
         public string Content { get; set; } = string.Empty;
+        public DateTime? CreatedOn { get; }
+        public DateTime? UpdatedOn { get; }
     }
 }

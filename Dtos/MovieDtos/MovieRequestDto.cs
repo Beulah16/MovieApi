@@ -9,10 +9,10 @@ namespace MovieApi.Dtos
 {
     public class MovieRequestDto
     {
+        [Required]
+        [MinLength(5, ErrorMessage ="Title must be a minimum of 5 characters")]
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        [DataType(DataType.Date)]
-        public DateTime ReleasedOn { get; set; }
         public string Genre { get; set; } = string.Empty;
     }
 }

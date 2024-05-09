@@ -15,7 +15,6 @@ namespace MovieApi.Mappers
             {
                 MovieId = reviewDto.MovieId,
                 Rating = reviewDto.Rating,
-                PostedOn = DateTime.Now,
                 Content = reviewDto.Content
 
             };

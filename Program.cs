@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MovieApi.Data;
+using MovieApi.Interfaces;
+using MovieApi.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,9 @@ builder.Services.AddDbContext<MovieDbContext>(options =>{
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddControllers();
+builder.Services.AddScoped<IMovieRepo, MovieRepo>();
+builder.Services.AddIdentityApiEndpoints<User>().AddEntityFrameworkStores<MovieDbContext>();
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
@@ -22,4 +27,5 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.MapControllers();
+app.MapGroup("/auth/user").MapCustomIdentityApi<User>().WithTags("Account");
 app.Run();

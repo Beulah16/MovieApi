@@ -13,9 +13,8 @@ namespace MovieApi.Mappers
         {
             return new Movie
             {
-                Title = movieDto.Title,
+                Title = movieDto.Title.Trim(),
                 Description = movieDto.Description,
-                ReleasedOn = movieDto.ReleasedOn,
                 Genre = movieDto.Genre
             };
         }
@@ -27,8 +26,8 @@ namespace MovieApi.Mappers
                 Id = movie.Id,
                 Title = movie.Title,
                 Description = movie.Description,
-                ReleasedOn = movie.ReleasedOn,
                 Genre = movie.Genre,
+                ReleasedOn = movie.ReleasedOn,
                 Reviews = movie.Reviews.Select(r => r.ReadReview()).ToList()
             };
         }
