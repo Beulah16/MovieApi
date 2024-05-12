@@ -1,19 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MovieApi.Dtos
+namespace MovieApi.Dtos.ReviewDtos
 {
-    public class ReviewRequestDto
+    public class ReviewResponseDto
     {
-        // public int MovieId { get; set; }
-        [Required]
-        [Range(1, 5)]
+        public int Id { get; set; }
+        public string MovieTitle { get; set; } = string.Empty;
         public decimal Rating { get; set; }
-        [Required]
         public string Content { get; set; } = string.Empty;
-        
     }
 }

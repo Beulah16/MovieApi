@@ -27,8 +27,6 @@ namespace MovieApi.Mappers
                 Title = movie.Title,
                 Description = movie.Description,
                 Genre = movie.Genre,
-                ReleasedOn = movie.ReleasedOn,
-                Reviews = movie.Reviews.Select(r => r.ReadReview()).ToList()
             };
         }
     }

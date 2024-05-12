@@ -28,7 +28,7 @@ namespace MovieApi.Repository
 
         public async Task<List<Movie>> ReadAllAsync(QueryObject query)
         {
-            var movie = _dbContext.Movies.Include(r => r.Reviews).AsQueryable();
+            var movie = _dbContext.Movies.AsQueryable();
             if (!string.IsNullOrWhiteSpace(query.Title))
             {
                 movie = movie.Where(m => m.Title.Contains(query.Title));
@@ -54,7 +54,7 @@ namespace MovieApi.Repository
 
         public async Task<Movie?> ReadByIdAsync(int id)
         {
-            var movie = await _dbContext.Movies.Include(c => c.Reviews).FirstOrDefaultAsync(x => id == x.Id);
+            var movie = await _dbContext.Movies.FirstOrDefaultAsync(x => id == x.Id);
             if (movie == null) return null;
 
             return movie;
@@ -68,7 +68,6 @@ namespace MovieApi.Repository
             movie.Title = updateMovie.Title;
             movie.Description = updateMovie.Description;
             movie.Genre = updateMovie.Genre;
-
             await _dbContext.SaveChangesAsync();
             return movie;
         }
