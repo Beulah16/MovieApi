@@ -14,12 +14,13 @@ namespace MovieApi.Dtos
         public string Description { get; set; } = string.Empty;
         public string Genre { get; set; } = string.Empty;
         [DataType(DataType.Date)]
-        public DateTime? ReleasedOn { get; set; }
+        public string? ReleasedOn { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime? CreatedOn { get; }
 
         [DataType(DataType.Date)]
         public DateTime? UpdatedOn { get; }
+        public List<ReviewResponseDto> Reviews { get; set; } = [];
     }
 }

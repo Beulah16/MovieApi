@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.IdentityModel.Tokens;
 using MovieApi.Dtos;
 using MovieApi.Models;
 
@@ -27,6 +29,8 @@ namespace MovieApi.Mappers
                 Title = movie.Title,
                 Description = movie.Description,
                 Genre = movie.Genre,
+                ReleasedOn = movie.ReleasedOn.ToString().IsNullOrEmpty() ?  null : movie.ReleasedOn.ToString(),
+                Reviews = movie.Reviews.Select(r => r.ReadReview()).ToList(),
             };
         }
     }

@@ -17,7 +17,7 @@ namespace MovieApi.Controllers
         private readonly IMovieRepo _movieRepo = movieRepo;
         private readonly IReviewRepo _reviewRepo = reviewRepo;
 
-        [Authorize]
+        // [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] MovieRequestDto newMovie)
         {
@@ -44,7 +44,7 @@ namespace MovieApi.Controllers
             return Ok(movie.ReadMovie());
         }
 
-        [Authorize]
+        // [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] MovieRequestDto updateMovie)
         {
@@ -54,7 +54,7 @@ namespace MovieApi.Controllers
             return Ok(movie);
         }
 
-        [Authorize]
+        // [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -62,6 +62,16 @@ namespace MovieApi.Controllers
             if (movie == null) return NotFound("Movie does not exist!");
 
             return Ok("Deleted!");
+        }
+
+        // [Authorize]
+        [HttpPatch("{id}/release")]
+        public async Task<IActionResult> ReleaseMovie(int id)
+        {
+            var movie = await _movieRepo.ReleaseAsync(id);
+            if (movie == null) return NotFound("Movie does not exist!");
+
+            return Ok(movie);
         }
 
         [HttpGet("{id}/reviews")]
@@ -73,7 +83,7 @@ namespace MovieApi.Controllers
             return Ok(review.Select(r => r.ReadReview()));
         }
 
-        [Authorize]
+        // [Authorize]
         [HttpPost("{id}/reviews")]
         public async Task<IActionResult> CreateMovieReview(int id, ReviewRequestDto newReview)
         {

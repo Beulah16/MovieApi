@@ -38,13 +38,13 @@ builder.Services.AddSwaggerGen(option =>
 builder.Services.AddDbContext<MovieDbContext>(options =>{
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
-builder.Services.AddControllers();
 builder.Services.AddScoped<IMovieRepo, MovieRepo>();
 builder.Services.AddScoped<IReviewRepo, ReviewRepo>();
 
 builder.Services.AddIdentityApiEndpoints<User>().AddEntityFrameworkStores<MovieDbContext>();
 builder.Services.AddAuthorization();
 
+builder.Services.AddControllers();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

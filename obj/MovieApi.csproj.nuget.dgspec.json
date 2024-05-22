@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\BEULAH\\OneDrive\\Desktop\\Code Projects\\MovieApi\\MovieApi.csproj": {}
+    "C:\\Users\\BEULAH\\OneDrive\\Desktop\\Code Projects\\ASP.NET_Projects\\MovieApi\\MovieApi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\BEULAH\\OneDrive\\Desktop\\Code Projects\\MovieApi\\MovieApi.csproj": {
+    "C:\\Users\\BEULAH\\OneDrive\\Desktop\\Code Projects\\ASP.NET_Projects\\MovieApi\\MovieApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\BEULAH\\OneDrive\\Desktop\\Code Projects\\MovieApi\\MovieApi.csproj",
+        "projectUniqueName": "C:\\Users\\BEULAH\\OneDrive\\Desktop\\Code Projects\\ASP.NET_Projects\\MovieApi\\MovieApi.csproj",
         "projectName": "MovieApi",
-        "projectPath": "C:\\Users\\BEULAH\\OneDrive\\Desktop\\Code Projects\\MovieApi\\MovieApi.csproj",
+        "projectPath": "C:\\Users\\BEULAH\\OneDrive\\Desktop\\Code Projects\\ASP.NET_Projects\\MovieApi\\MovieApi.csproj",
         "packagesPath": "C:\\Users\\BEULAH\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\BEULAH\\OneDrive\\Desktop\\Code Projects\\MovieApi\\obj\\",
+        "outputPath": "C:\\Users\\BEULAH\\OneDrive\\Desktop\\Code Projects\\ASP.NET_Projects\\MovieApi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\BEULAH\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -34,6 +34,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -104,7 +109,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

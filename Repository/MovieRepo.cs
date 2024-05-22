@@ -37,24 +37,22 @@ namespace MovieApi.Repository
             {
                 movie = movie.Where(m => m.Genre.Contains(query.Genre));
             }
+
             if (!string.IsNullOrWhiteSpace(query.SortBy))
             {
                 if (query.SortBy.Equals("Title", StringComparison.OrdinalIgnoreCase))
                 {
                     movie = query.IsDescending ? movie.OrderByDescending(m => m.Title) : movie.OrderBy(m => m.Title);
                 }
-                if (query.SortBy.Equals("ReleasedOn", StringComparison.OrdinalIgnoreCase))
-                {
-                    movie = query.IsDescending ? movie.OrderByDescending(m => m.ReleasedOn) : movie.OrderBy(m => m.ReleasedOn);
-                }
             }
-
+            movie = query.IsReleased.HasValue ? (query.IsReleased.Value ? movie.Where(m => m.ReleasedOn != null) : movie.Where(m => m.ReleasedOn == null)) : movie;
+            
             return await movie.ToListAsync();
         }
 
         public async Task<Movie?> ReadByIdAsync(int id)
         {
-            var movie = await _dbContext.Movies.FirstOrDefaultAsync(x => id == x.Id);
+            var movie = await _dbContext.Movies.Include(r => r.Reviews).FirstOrDefaultAsync(x => id == x.Id);
             if (movie == null) return null;
 
             return movie;
@@ -80,6 +78,16 @@ namespace MovieApi.Repository
             _dbContext.Movies.Remove(movie);
             await _dbContext.SaveChangesAsync();
 
+            return movie;
+        }
+
+         public async Task<Movie?> ReleaseAsync(int id)
+        {
+            var movie = await _dbContext.Movies.FindAsync(id);
+            if (movie == null) return null;
+
+            movie.ReleasedOn = DateTime.Now;
+            await _dbContext.SaveChangesAsync();
             return movie;
         }
     }

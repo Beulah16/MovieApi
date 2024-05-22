@@ -16,8 +16,6 @@ namespace MovieApi.Interfaces
         Task<Movie?> ReadByIdAsync(int id);
         Task<Movie?> UpdateAsync(int id, MovieRequestDto newMovie);
         Task<Movie?> DeleteAsync(int id);
-
-
-
+        Task<Movie?> ReleaseAsync(int id);  
     }
 }

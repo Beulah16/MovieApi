@@ -65,6 +65,7 @@ public static class IdentityApiEndpointRouteBuilderExtensions
             var userStore = sp.GetRequiredService<IUserStore<TUser>>();
             var emailStore = (IUserEmailStore<TUser>)userStore;
             var email = registration.Email;
+            var userName = registration.UserName;
 
             if (string.IsNullOrEmpty(email) || !_emailAddressAttribute.IsValid(email))
             {
@@ -72,7 +73,7 @@ public static class IdentityApiEndpointRouteBuilderExtensions
             }
 
             var user = new TUser();
-            await userStore.SetUserNameAsync(user, email, CancellationToken.None);
+            await userStore.SetUserNameAsync(user, userName, CancellationToken.None);
             await emailStore.SetEmailAsync(user, email, CancellationToken.None);
             var result = await userManager.CreateAsync(user, registration.Password);
 
@@ -97,8 +98,10 @@ public static class IdentityApiEndpointRouteBuilderExtensions
             signInManager.AuthenticationScheme = useCookieScheme ? IdentityConstants.ApplicationScheme : IdentityConstants.BearerScheme;
 
             var user = await userManager.FindByEmailAsync(login.Email);
+                
+            if (user == null) return TypedResults.Problem("You're not a registered user.");
 
-            var result = await signInManager.PasswordSignInAsync(user, login.Password, isPersistent, lockoutOnFailure: true);
+            var result = await signInManager.CheckPasswordSignInAsync(user, login.Password, lockoutOnFailure: false);
 
             if (result.RequiresTwoFactor)
             {
