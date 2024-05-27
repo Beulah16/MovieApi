@@ -15,7 +15,17 @@ namespace MovieApi.Repository
     {
         private readonly MovieDbContext _context = context;
 
-        public async Task<Review?> CreateMovieReviewAsync(int movieId, ReviewRequestDto newReview)
+        public async Task<List<Review>?> GetMovieReviewAsync(int movieId)
+        {
+            var movie = await _context.Movies.FindAsync(movieId);
+            if (movie == null) return null;
+
+            var reviews = _context.Reviews.Where(r => r.MovieId.Equals(movieId));
+
+            return await reviews.ToListAsync();
+        }
+
+        public async Task<Review?> PostMovieReviewAsync(int movieId, ReviewRequestDto newReview)
         {
             var movie = await _context.Movies.FindAsync(movieId);
             if (movie == null) return null;
@@ -28,17 +38,7 @@ namespace MovieApi.Repository
             return review;
         }
 
-        public async Task<List<Review>?> ReadMovieReviewAsync(int movieId)
-        {
-            var movie = await _context.Movies.FindAsync(movieId);
-            if (movie == null) return null;
-
-            var reviews =  _context.Reviews.Where(r => r.MovieId.Equals(movieId));
-
-            return await reviews.ToListAsync();
-        }
-
-        public async Task<Review?> ReadByIdAsync(int id)
+        public async Task<Review?> GetByIdAsync(int id)
         {
             var review = await _context.Reviews.FindAsync(id);
             if (review == null) return null;

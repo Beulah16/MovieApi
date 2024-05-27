@@ -125,56 +125,56 @@ public static class IdentityApiEndpointRouteBuilderExtensions
             return TypedResults.Empty;
         });
 
-        routeGroup.MapGet("/confirmEmail", async Task<Results<ContentHttpResult, UnauthorizedHttpResult>>
-            ([FromQuery] string userId, [FromQuery] string code, [FromQuery] string? changedEmail, [FromServices] IServiceProvider sp) =>
-        {
-            var userManager = sp.GetRequiredService<UserManager<TUser>>();
-            if (await userManager.FindByIdAsync(userId) is not { } user)
-            {
-                // We could respond with a 404 instead of a 401 like Identity UI, but that feels like unnecessary information.
-                return TypedResults.Unauthorized();
-            }
+        // routeGroup.MapGet("/confirmEmail", async Task<Results<ContentHttpResult, UnauthorizedHttpResult>>
+        //     ([FromQuery] string userId, [FromQuery] string code, [FromQuery] string? changedEmail, [FromServices] IServiceProvider sp) =>
+        // {
+        //     var userManager = sp.GetRequiredService<UserManager<TUser>>();
+        //     if (await userManager.FindByIdAsync(userId) is not { } user)
+        //     {
+        //         // We could respond with a 404 instead of a 401 like Identity UI, but that feels like unnecessary information.
+        //         return TypedResults.Unauthorized();
+        //     }
 
-            try
-            {
-                code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
-            }
-            catch (FormatException)
-            {
-                return TypedResults.Unauthorized();
-            }
+        //     try
+        //     {
+        //         code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+        //     }
+        //     catch (FormatException)
+        //     {
+        //         return TypedResults.Unauthorized();
+        //     }
 
-            IdentityResult result;
+        //     IdentityResult result;
 
-            if (string.IsNullOrEmpty(changedEmail))
-            {
-                result = await userManager.ConfirmEmailAsync(user, code);
-            }
-            else
-            {
-                // As with Identity UI, email and user name are one and the same. So when we update the email,
-                // we need to update the user name.
-                result = await userManager.ChangeEmailAsync(user, changedEmail, code);
+        //     if (string.IsNullOrEmpty(changedEmail))
+        //     {
+        //         result = await userManager.ConfirmEmailAsync(user, code);
+        //     }
+        //     else
+        //     {
+        //         // As with Identity UI, email and user name are one and the same. So when we update the email,
+        //         // we need to update the user name.
+        //         result = await userManager.ChangeEmailAsync(user, changedEmail, code);
 
-                if (result.Succeeded)
-                {
-                    result = await userManager.SetUserNameAsync(user, changedEmail);
-                }
-            }
+        //         if (result.Succeeded)
+        //         {
+        //             result = await userManager.SetUserNameAsync(user, changedEmail);
+        //         }
+        //     }
 
-            if (!result.Succeeded)
-            {
-                return TypedResults.Unauthorized();
-            }
+        //     if (!result.Succeeded)
+        //     {
+        //         return TypedResults.Unauthorized();
+        //     }
 
-            return TypedResults.Text("Thank you for confirming your email.");
-        })
-        .Add(endpointBuilder =>
-        {
-            var finalPattern = ((RouteEndpointBuilder)endpointBuilder).RoutePattern.RawText;
-            confirmEmailEndpointName = $"{nameof(MapCustomIdentityApi)}-{finalPattern}";
-            endpointBuilder.Metadata.Add(new EndpointNameMetadata(confirmEmailEndpointName));
-        });
+        //     return TypedResults.Text("Thank you for confirming your email.");
+        // })
+        // .Add(endpointBuilder =>
+        // {
+        //     var finalPattern = ((RouteEndpointBuilder)endpointBuilder).RoutePattern.RawText;
+        //     confirmEmailEndpointName = $"{nameof(MapCustomIdentityApi)}-{finalPattern}";
+        //     endpointBuilder.Metadata.Add(new EndpointNameMetadata(confirmEmailEndpointName));
+        // });
 
         routeGroup.MapPost("/forgotPassword", async Task<Results<Ok, ValidationProblem>>
             ([FromBody] ForgotPasswordRequest resetRequest, [FromServices] IServiceProvider sp) =>

@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+
 using System.Drawing.Text;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MovieApi.Data;
@@ -16,18 +18,14 @@ namespace MovieApi.Controllers
 {
     [Route("api/reviews")]
     [ApiController]
-    public class ReviewController : ControllerBase
+    public class ReviewController(IReviewRepo repo) : ControllerBase
     {
-        private readonly IReviewRepo _repo;
-        public ReviewController(IReviewRepo repo)
-        {
-            _repo = repo;
-        }
-
+        private readonly IReviewRepo _repo = repo;
+        
         [HttpGet("{id}")]
-        public async Task<IActionResult> ReadById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            var review = await _repo.ReadByIdAsync(id);
+            var review = await _repo.GetByIdAsync(id);
             if (review == null) return NotFound("Review ndoes not exist");
 
             return Ok(review.ReadReview());

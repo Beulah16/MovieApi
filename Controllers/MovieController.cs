@@ -1,47 +1,56 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MovieApi.Data;
 using MovieApi.Dtos;
 using MovieApi.Helpers;
 using MovieApi.Interfaces;
 using MovieApi.Mappers;
+using MovieApi.Models;
 
 namespace MovieApi.Controllers
 {
     [Route("api/movies")]
     [ApiController]
-    public class MovieController(IMovieRepo movieRepo, IReviewRepo reviewRepo) : ControllerBase
+    public class MovieController : ControllerBase
     {
-        private readonly IMovieRepo _movieRepo = movieRepo;
-        private readonly IReviewRepo _reviewRepo = reviewRepo;
-
-        // [Authorize]
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] MovieRequestDto newMovie)
+        private readonly IMovieRepo _movieRepo;
+        private readonly IReviewRepo _reviewRepo;
+        private readonly UserManager<User> _user;
+        public MovieController(IMovieRepo movieRepo, IReviewRepo reviewRepo, UserManager<User> user)
         {
-            var movie = await _movieRepo.CreateAsync(newMovie);
-
-            return CreatedAtAction(nameof(ReadById), new { id = movie.Id }, movie);
+            _movieRepo = movieRepo;
+            _reviewRepo = reviewRepo;
+            _user = user;
         }
 
+
         [HttpGet]
-        public async Task<IActionResult> ReadAll([FromQuery] QueryObject query)
+        public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
         {
-            var movies = await _movieRepo.ReadAllAsync(query);
+            var movies = await _movieRepo.GetAllAsync(query);
 
             return Ok(movies.Select(m => m.ReadMovie()));
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> ReadById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            var movie = await _movieRepo.ReadByIdAsync(id);
+            var movie = await _movieRepo.GetByIdAsync(id);
             if (movie == null) return NotFound("Movie does not exist!");
 
 
             return Ok(movie.ReadMovie());
+        }
+
+        // [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] MovieRequestDto newMovie)
+        {
+            var movie = await _movieRepo.PostAsync(newMovie);
+
+            return CreatedAtAction(nameof(GetById), new { id = movie.Id }, movie);
         }
 
         // [Authorize]
@@ -75,9 +84,9 @@ namespace MovieApi.Controllers
         }
 
         [HttpGet("{id}/reviews")]
-        public async Task<IActionResult> ReadMovieReview(int id)
+        public async Task<IActionResult> GetMovieReview(int id)
         {
-            var review = await _reviewRepo.ReadMovieReviewAsync(id);
+            var review = await _reviewRepo.GetMovieReviewAsync(id);
             if (review == null) return NotFound("Review does not exist");
 
             return Ok(review.Select(r => r.ReadReview()));
@@ -85,9 +94,9 @@ namespace MovieApi.Controllers
 
         // [Authorize]
         [HttpPost("{id}/reviews")]
-        public async Task<IActionResult> CreateMovieReview(int id, ReviewRequestDto newReview)
+        public async Task<IActionResult> PostMovieReview(int id, ReviewRequestDto newReview)
         {
-            var review = await _reviewRepo.CreateMovieReviewAsync(id, newReview);
+            var review = await _reviewRepo.PostMovieReviewAsync(id, newReview);
             if (review == null) return NotFound("Movie does not exist");
 
             return CreatedAtAction("ReadMovieReview", new { id = review.Id }, review);

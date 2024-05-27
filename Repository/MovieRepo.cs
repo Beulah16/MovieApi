@@ -18,24 +18,25 @@ namespace MovieApi.Repository
     public class MovieRepo(MovieDbContext dbContext) : IMovieRepo
     {
         private readonly MovieDbContext _dbContext = dbContext;
-        public async Task<Movie> CreateAsync(MovieRequestDto newMovie)
-        {
-            var movie = newMovie.CreateMovie();
-            await _dbContext.Movies.AddAsync(movie);
-            await _dbContext.SaveChangesAsync();
-            return movie;
-        }
 
-        public async Task<List<Movie>> ReadAllAsync(QueryObject query)
+
+        public async Task<List<Movie>> GetAllAsync(QueryObject query)
         {
             var movie = _dbContext.Movies.AsQueryable();
-            if (!string.IsNullOrWhiteSpace(query.Title))
+            // var filterBy = query.FilterBy.HasValue;
+            // if (query.FilterBy != null)
             {
-                movie = movie.Where(m => m.Title.Contains(query.Title));
+
             }
-            if (!string.IsNullOrWhiteSpace(query.Genre))
+
+            if (!string.IsNullOrWhiteSpace(query.Search))
             {
-                movie = movie.Where(m => m.Genre.Contains(query.Genre));
+                movie = movie.Where(m =>
+                        m.Title.Contains(query.Search)
+                        || m.Description.Contains(query.Search)
+                        || m.Genre.Contains(query.Search)
+                        || m.Reviews.Any(r => r.Rating.ToString().Contains(query.Search))
+                        || m.ReleasedOn.HasValue && m.ReleasedOn.Value.ToString().Contains(query.Search));
             }
 
             if (!string.IsNullOrWhiteSpace(query.SortBy))
@@ -46,11 +47,11 @@ namespace MovieApi.Repository
                 }
             }
             movie = query.IsReleased.HasValue ? (query.IsReleased.Value ? movie.Where(m => m.ReleasedOn != null) : movie.Where(m => m.ReleasedOn == null)) : movie;
-            
+
             return await movie.ToListAsync();
         }
 
-        public async Task<Movie?> ReadByIdAsync(int id)
+        public async Task<Movie?> GetByIdAsync(int id)
         {
             var movie = await _dbContext.Movies.Include(r => r.Reviews).FirstOrDefaultAsync(x => id == x.Id);
             if (movie == null) return null;
@@ -58,6 +59,13 @@ namespace MovieApi.Repository
             return movie;
         }
 
+        public async Task<Movie> PostAsync(MovieRequestDto newMovie)
+        {
+            var movie = newMovie.CreateMovie();
+            await _dbContext.Movies.AddAsync(movie);
+            await _dbContext.SaveChangesAsync();
+            return movie;
+        }
         public async Task<Movie?> UpdateAsync(int id, MovieRequestDto updateMovie)
         {
             var movie = await _dbContext.Movies.FindAsync(id);
@@ -81,7 +89,7 @@ namespace MovieApi.Repository
             return movie;
         }
 
-         public async Task<Movie?> ReleaseAsync(int id)
+        public async Task<Movie?> ReleaseAsync(int id)
         {
             var movie = await _dbContext.Movies.FindAsync(id);
             if (movie == null) return null;

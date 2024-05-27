@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MovieApi.Data;
 using MovieApi.Interfaces;
+using MovieApi.Models;
 using MovieApi.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -40,6 +41,7 @@ builder.Services.AddDbContext<MovieDbContext>(options =>{
 });
 builder.Services.AddScoped<IMovieRepo, MovieRepo>();
 builder.Services.AddScoped<IReviewRepo, ReviewRepo>();
+builder.Services.AddScoped<IGenreRepo, GenreRepo>();
 
 builder.Services.AddIdentityApiEndpoints<User>().AddEntityFrameworkStores<MovieDbContext>();
 builder.Services.AddAuthorization();
@@ -57,5 +59,5 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.MapControllers();
 
-app.MapGroup("/api/user").MapCustomIdentityApi<User>().WithTags("Account");
+app.MapGroup("/api/auth").MapCustomIdentityApi<User>().WithTags("Auth");
 app.Run();

@@ -11,9 +11,9 @@ namespace MovieApi.Interfaces
 {
     public interface IMovieRepo
     {
-        Task<Movie> CreateAsync(MovieRequestDto newMovie);
-        Task<List<Movie>> ReadAllAsync(QueryObject query);
-        Task<Movie?> ReadByIdAsync(int id);
+        Task<Movie> PostAsync(MovieRequestDto newMovie);
+        Task<List<Movie>> GetAllAsync(QueryObject query);
+        Task<Movie?> GetByIdAsync(int id);
         Task<Movie?> UpdateAsync(int id, MovieRequestDto newMovie);
         Task<Movie?> DeleteAsync(int id);
         Task<Movie?> ReleaseAsync(int id);  
