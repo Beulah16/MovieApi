@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using MovieApi.Data;
+using MovieApi.Dtos;
 using MovieApi.Interfaces;
+using MovieApi.Mappers;
 using MovieApi.Models;
 
 namespace MovieApi.Repository
@@ -13,15 +15,10 @@ namespace MovieApi.Repository
     public class WatchListRepo(MovieDbContext context) : IWatchListRepo
     {
         private readonly MovieDbContext _context = context;
-        public async Task<List<Movie>?> GetWatchlistAsync(User user)
+        public async Task<List<MovieResponseDto>?> GetWatchlistAsync(User user)
         {            
             return await _context.WatchLists.Where(u => u.UserId == user.Id)
-            .Select(m => new Movie
-            {
-                Id = m.Movie.Id,
-                Title = m.Movie.Title,
-                Description = m.Movie.Description,
-            }).ToListAsync();
+            .Select(m => m.Movie.ReadMovie()).ToListAsync();
         }
 
         public async Task<WatchList> CreateAsync(User user, int movieId)
