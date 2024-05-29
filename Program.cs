@@ -42,6 +42,8 @@ builder.Services.AddDbContext<MovieDbContext>(options =>{
 builder.Services.AddScoped<IMovieRepo, MovieRepo>();
 builder.Services.AddScoped<IReviewRepo, ReviewRepo>();
 builder.Services.AddScoped<IGenreRepo, GenreRepo>();
+builder.Services.AddScoped<IWatchListRepo, WatchListRepo>();
+;
 
 builder.Services.AddIdentityApiEndpoints<User>().AddEntityFrameworkStores<MovieDbContext>();
 builder.Services.AddAuthorization();
