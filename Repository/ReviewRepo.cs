@@ -15,7 +15,7 @@ namespace MovieApi.Repository
     {
         private readonly MovieDbContext _context = context;
 
-        public async Task<List<Review>?> GetMovieReviewAsync(int movieId)
+        public async Task<List<Review>?> GetMovieReviewAsync(Guid movieId)
         {
             var movie = await _context.Movies.FindAsync(movieId);
             if (movie == null) return null;
@@ -25,7 +25,7 @@ namespace MovieApi.Repository
             return await reviews.ToListAsync();
         }
 
-        public async Task<Review?> PostMovieReviewAsync(int movieId, ReviewRequestDto newReview)
+        public async Task<Review?> PostMovieReviewAsync(Guid movieId, ReviewRequestDto newReview)
         {
             var movie = await _context.Movies.FindAsync(movieId);
             if (movie == null) return null;
@@ -38,7 +38,7 @@ namespace MovieApi.Repository
             return review;
         }
 
-        public async Task<Review?> GetByIdAsync(int id)
+        public async Task<Review?> GetByIdAsync(Guid id)
         {
             var review = await _context.Reviews.FindAsync(id);
             if (review == null) return null;
@@ -46,7 +46,7 @@ namespace MovieApi.Repository
             return review;
         }
 
-        public async Task<Review?> UpdateAsync(int id, ReviewRequestDto updateReview)
+        public async Task<Review?> UpdateAsync(Guid id, ReviewRequestDto updateReview)
         {
             var review = await _context.Reviews.FindAsync(id);
             if (review == null) return null;
@@ -58,7 +58,7 @@ namespace MovieApi.Repository
             return review;
         }
 
-        public async Task<Review?> DeleteAsync(int id)
+        public async Task<Review?> DeleteAsync(Guid id)
         {
             var review = await _context.Reviews.FindAsync(id);
             if (review == null) return null;

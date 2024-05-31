@@ -10,8 +10,8 @@ namespace MovieApi.Interfaces
     public interface IWatchListRepo
     {
         Task<List<MovieResponseDto>?> GetWatchlistAsync(User user);
-        Task<WatchList> CreateAsync(User user, int movieId);
-        Task<WatchList?> DeleteAsync(User user, int movieId);
+        Task<WatchList> CreateAsync(User user, Guid movieId);
+        Task<WatchList?> DeleteAsync(User user, Guid movieId);
 
 
     }

@@ -10,8 +10,8 @@ namespace MovieApi.Models
 {
     public class Review
     {
-        public int Id { get; set; }
-        public int MovieId { get; set; }
+        public Guid Id { get; set; }
+        public Guid MovieId { get; set; }
         public string MovieTitle { get; set; } = string.Empty;
         [Column(TypeName = "decimal(18,2)")]
         public decimal Rating { get; set; }

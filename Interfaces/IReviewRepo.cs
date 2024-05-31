@@ -9,10 +9,10 @@ namespace MovieApi.Interfaces
 {
     public interface IReviewRepo
     {
-        Task<Review?> PostMovieReviewAsync(int movieId, ReviewRequestDto newReview);
-        Task<List<Review>?> GetMovieReviewAsync(int movieId);
-        Task<Review?> GetByIdAsync(int id);
-        Task<Review?> UpdateAsync(int id, ReviewRequestDto newReview);
-        Task<Review?> DeleteAsync(int id);
+        Task<Review?> PostMovieReviewAsync(Guid movieId, ReviewRequestDto newReview);
+        Task<List<Review>?> GetMovieReviewAsync(Guid movieId);
+        Task<Review?> GetByIdAsync(Guid id);
+        Task<Review?> UpdateAsync(Guid id, ReviewRequestDto newReview);
+        Task<Review?> DeleteAsync(Guid id);
     }
 }

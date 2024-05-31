@@ -10,7 +10,7 @@ namespace MovieApi.Mappers
 {
     public static class ReviewMapper
     {
-        public static Review CreateReview(this ReviewRequestDto review, int movieId)
+        public static Review CreateReview(this ReviewRequestDto review, Guid movieId)
         {
             return new Review
             {

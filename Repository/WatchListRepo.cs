@@ -21,7 +21,7 @@ namespace MovieApi.Repository
             .Select(m => m.Movie.ReadMovie()).ToListAsync();
         }
 
-        public async Task<WatchList> CreateAsync(User user, int movieId)
+        public async Task<WatchList> CreateAsync(User user, Guid movieId)
         {
            var watchlist = new WatchList
             {
@@ -34,7 +34,7 @@ namespace MovieApi.Repository
             return watchlist;
         }
 
-        public async Task<WatchList?> DeleteAsync(User user, int movieId)
+        public async Task<WatchList?> DeleteAsync(User user, Guid movieId)
         {
             var watchlist = await _context.WatchLists.FirstOrDefaultAsync(u => u.UserId == user.Id && u.MovieId == movieId);
             if (watchlist == null) return null;

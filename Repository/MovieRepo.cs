@@ -51,9 +51,9 @@ namespace MovieApi.Repository
             return await movie.ToListAsync();
         }
 
-        public async Task<Movie?> GetByIdAsync(int id)
+        public async Task<Movie?> GetByIdAsync(Guid id)
         {
-            var movie = await _dbContext.Movies.Include(r => r.Reviews).FirstOrDefaultAsync(x => id == x.Id);
+            var movie = await _dbContext.Movies.Include(r => r.Reviews).FirstOrDefaultAsync(x => x.Id == id);
             if (movie == null) return null;
 
             return movie;
@@ -66,7 +66,7 @@ namespace MovieApi.Repository
             await _dbContext.SaveChangesAsync();
             return movie;
         }
-        public async Task<Movie?> UpdateAsync(int id, MovieRequestDto updateMovie)
+        public async Task<Movie?> UpdateAsync(Guid id, MovieRequestDto updateMovie)
         {
             var movie = await _dbContext.Movies.FindAsync(id);
             if (movie == null) return null;
@@ -78,7 +78,7 @@ namespace MovieApi.Repository
             return movie;
         }
 
-        public async Task<Movie?> DeleteAsync(int id)
+        public async Task<Movie?> DeleteAsync(Guid id)
         {
             var movie = await _dbContext.Movies.FindAsync(id);
             if (movie == null) return null;
@@ -89,7 +89,7 @@ namespace MovieApi.Repository
             return movie;
         }
 
-        public async Task<Movie?> ReleaseAsync(int id)
+        public async Task<Movie?> ReleaseAsync(Guid id)
         {
             var movie = await _dbContext.Movies.FindAsync(id);
             if (movie == null) return null;

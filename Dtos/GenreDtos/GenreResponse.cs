@@ -8,7 +8,7 @@ namespace MovieApi.Dtos.MovieDtos
 {
     public class GenreResponse
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Type { get; set; } = string.Empty;
         public List<Movie> Movies { get; set; } = [];
     }

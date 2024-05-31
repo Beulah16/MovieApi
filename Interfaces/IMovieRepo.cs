@@ -13,9 +13,9 @@ namespace MovieApi.Interfaces
     {
         Task<Movie> PostAsync(MovieRequestDto newMovie);
         Task<List<Movie>> GetAllAsync(QueryObject query);
-        Task<Movie?> GetByIdAsync(int id);
-        Task<Movie?> UpdateAsync(int id, MovieRequestDto newMovie);
-        Task<Movie?> DeleteAsync(int id);
-        Task<Movie?> ReleaseAsync(int id);  
+        Task<Movie?> GetByIdAsync(Guid id);
+        Task<Movie?> UpdateAsync(Guid id, MovieRequestDto newMovie);
+        Task<Movie?> DeleteAsync(Guid id);
+        Task<Movie?> ReleaseAsync(Guid id);  
     }
 }

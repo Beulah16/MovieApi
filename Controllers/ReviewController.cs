@@ -23,7 +23,7 @@ namespace MovieApi.Controllers
         private readonly IReviewRepo _repo = repo;
         
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(Guid id)
         {
             var review = await _repo.GetByIdAsync(id);
             if (review == null) return NotFound("Review ndoes not exist");
@@ -33,7 +33,7 @@ namespace MovieApi.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, ReviewRequestDto updateReview)
+        public async Task<IActionResult> Update(Guid id, ReviewRequestDto updateReview)
         {
             var review = await _repo.UpdateAsync(id, updateReview);
             if (review == null) return NotFound("Review ndoes not exist");
@@ -42,7 +42,7 @@ namespace MovieApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             var review = await _repo.DeleteAsync(id);
             if (review == null) return NotFound("Review does not exist");

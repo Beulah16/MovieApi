@@ -25,7 +25,7 @@ namespace MovieApi.Repository
             return await _dbContext.Genres.ToListAsync();
         }
 
-        public async Task<GenreResponse?> GetByIdAsync(int Id)
+        public async Task<GenreResponse?> GetByIdAsync(Guid Id)
         {
             var genre = await _dbContext.Genres.FindAsync(Id);
             if (genre == null) return null;
@@ -47,7 +47,7 @@ namespace MovieApi.Repository
             return genre;
         }
 
-        public async Task<Genre?> UpdateAsync(int Id, GenreRequest genreDto)
+        public async Task<Genre?> UpdateAsync(Guid Id, GenreRequest genreDto)
         {
             var genre = await _dbContext.Genres.FindAsync(Id);
             if (genre == null) return null;
@@ -57,7 +57,7 @@ namespace MovieApi.Repository
             return genre;
         }
 
-        public async Task<Genre?> DeleteAsync(int Id)
+        public async Task<Genre?> DeleteAsync(Guid Id)
         {
             var genre = await _dbContext.Genres.FindAsync(Id);
             if (genre == null) return null;

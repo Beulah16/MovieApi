@@ -7,7 +7,7 @@ namespace MovieApi.Dtos.ReviewDtos
 {
     public class ReviewResponseDto
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string MovieTitle { get; set; } = string.Empty;
         public decimal Rating { get; set; }
         public string Content { get; set; } = string.Empty;

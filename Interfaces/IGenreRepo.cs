@@ -12,9 +12,9 @@ namespace MovieApi.Interfaces
     {
         Task<Genre> PostAsync(GenreRequest genreDto);
         Task<List<Genre>> GetAllAsync();
-        Task<GenreResponse?> GetByIdAsync(int Id);
-        Task<Genre?> UpdateAsync(int Id, GenreRequest genreDto);
-        Task<Genre?> DeleteAsync(int Id);
+        Task<GenreResponse?> GetByIdAsync(Guid Id);
+        Task<Genre?> UpdateAsync(Guid Id, GenreRequest genreDto);
+        Task<Genre?> DeleteAsync(Guid Id);
 
 
 

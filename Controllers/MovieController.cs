@@ -35,7 +35,7 @@ namespace MovieApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(Guid id)
         {
             var movie = await _movieRepo.GetByIdAsync(id);
             if (movie == null) return NotFound("Movie does not exist!");
@@ -55,7 +55,7 @@ namespace MovieApi.Controllers
 
         // [Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] MovieRequestDto updateMovie)
+        public async Task<IActionResult> Update(Guid id, [FromBody] MovieRequestDto updateMovie)
         {
             var movie = await _movieRepo.UpdateAsync(id, updateMovie);
             if (movie == null) return NotFound("Movie does not exist!");
@@ -65,7 +65,7 @@ namespace MovieApi.Controllers
 
         // [Authorize]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             var movie = await _movieRepo.DeleteAsync(id);
             if (movie == null) return NotFound("Movie does not exist!");
@@ -75,7 +75,7 @@ namespace MovieApi.Controllers
 
         // [Authorize]
         [HttpPatch("{id}/release")]
-        public async Task<IActionResult> ReleaseMovie(int id)
+        public async Task<IActionResult> ReleaseMovie(Guid id)
         {
             var movie = await _movieRepo.ReleaseAsync(id);
             if (movie == null) return NotFound("Movie does not exist!");
@@ -84,7 +84,7 @@ namespace MovieApi.Controllers
         }
 
         [HttpGet("{id}/reviews")]
-        public async Task<IActionResult> GetMovieReview(int id)
+        public async Task<IActionResult> GetMovieReview(Guid id)
         {
             var review = await _reviewRepo.GetMovieReviewAsync(id);
             if (review == null) return NotFound("Review does not exist");
@@ -94,7 +94,7 @@ namespace MovieApi.Controllers
 
         // [Authorize]
         [HttpPost("{id}/reviews")]
-        public async Task<IActionResult> PostMovieReview(int id, ReviewRequestDto newReview)
+        public async Task<IActionResult> PostMovieReview(Guid id, ReviewRequestDto newReview)
         {
             var review = await _reviewRepo.PostMovieReviewAsync(id, newReview);
             if (review == null) return NotFound("Movie does not exist");

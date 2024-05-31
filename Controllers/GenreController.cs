@@ -23,7 +23,7 @@ namespace MyApp.Namespace
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<GenreResponse>> GetById(int id)
+        public async Task<ActionResult<GenreResponse>> GetById(Guid id)
         {
             var genreDto = await _genreRepo.GetByIdAsync(id);
             if (genreDto == null) return NotFound("Genre does not exist");
@@ -40,7 +40,7 @@ namespace MyApp.Namespace
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, GenreRequest genreDto)
+        public async Task<IActionResult> Update(Guid id, GenreRequest genreDto)
         {
             var genre = await _genreRepo.UpdateAsync(id, genreDto);
             if (genre == null) return NotFound("Genre does not exist");
@@ -49,7 +49,7 @@ namespace MyApp.Namespace
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             var genre = await _genreRepo.DeleteAsync(id);
             if (genre == null) return NotFound("Genre does not exist");

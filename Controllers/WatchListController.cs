@@ -43,7 +43,7 @@ namespace MovieApi.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> CreateWatchList(int movieId)
+        public async Task<IActionResult> CreateWatchList(Guid movieId)
         {
             var user = await _user.FindByNameAsync(User.Identity.Name);
             if (user == null) return NotFound("You're not a registered user");
@@ -60,7 +60,7 @@ namespace MovieApi.Controllers
 
         [Authorize]
         [HttpDelete]
-        public async Task<IActionResult> DeleteWatchlist(int movieId)
+        public async Task<IActionResult> DeleteWatchlist(Guid movieId)
         {
             var user = await _user.FindByNameAsync(User.Identity.Name);
             if (user == null) return NotFound("You're not a registered user");
