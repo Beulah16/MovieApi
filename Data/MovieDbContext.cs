@@ -14,6 +14,8 @@ namespace MovieApi.Data
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<WatchList> WatchLists { get; set; }
+        public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
