@@ -28,7 +28,7 @@ namespace MovieApi.Controllers
             var review = await _repo.GetByIdAsync(id);
             if (review == null) return NotFound("Review ndoes not exist");
 
-            return Ok(review.ReadReview());
+            return Ok(review.ToReviewResponse());
         }
 
 
@@ -38,7 +38,7 @@ namespace MovieApi.Controllers
             var review = await _repo.UpdateAsync(id, updateReview);
             if (review == null) return NotFound("Review ndoes not exist");
 
-            return Ok(review.ReadReview());
+            return Ok(review.ToReviewResponse());
         }
 
         [HttpDelete("{id}")]

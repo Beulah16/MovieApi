@@ -16,7 +16,7 @@ namespace MovieApi.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal Rating { get; set; }
         public string Content { get; set; } = string.Empty;
-        public DateTime? CreatedOn { get; }
-        public DateTime? UpdatedOn { get; }
+        public DateTime? CreatedOn { get; set; }
+        public DateTime? UpdatedOn { get; set; }
     }
 }

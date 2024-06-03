@@ -15,10 +15,10 @@ namespace MovieApi.Repository
     public class WatchListRepo(MovieDbContext context) : IWatchListRepo
     {
         private readonly MovieDbContext _context = context;
-        public async Task<List<MovieResponseDto>?> GetWatchlistAsync(User user)
+        public async Task<List<MovieResponse>?> GetWatchlistAsync(User user)
         {            
             return await _context.WatchLists.Where(u => u.UserId == user.Id)
-            .Select(m => m.Movie.ReadMovie()).ToListAsync();
+            .Select(m => m.Movie.ToMovieResponse()).ToListAsync();
         }
 
         public async Task<WatchList> CreateAsync(User user, Guid movieId)

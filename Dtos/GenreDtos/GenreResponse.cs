@@ -10,6 +10,6 @@ namespace MovieApi.Dtos.MovieDtos
     {
         public Guid Id { get; set; }
         public string Type { get; set; } = string.Empty;
-        public List<Movie> Movies { get; set; } = [];
+        public List<MovieResponse> Movies { get; set; } = [];
     }
 }

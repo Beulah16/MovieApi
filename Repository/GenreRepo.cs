@@ -34,13 +34,13 @@ namespace MovieApi.Repository
             {
                 Id = genre.Id,
                 Type = genre.Type,
-                Movies = _dbContext.Movies.Where(x => x.Genre.Contains(genre.Type)).ToList()
+                Movies = _dbContext.Movies.Where(x => x.Genre.Contains(genre.Type)).Select(m => m.ToMovieResponse()).ToList()
             };
         }
 
         public async Task<Genre> PostAsync(GenreRequest genreDto)
         {
-            var genre = genreDto.CreateGenre();
+            var genre = new Genre{Type = genreDto.Type};
             await _dbContext.Genres.AddAsync(genre);
             await _dbContext.SaveChangesAsync();
 

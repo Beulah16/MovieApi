@@ -25,12 +25,12 @@ namespace MovieApi.Repository
             return await reviews.ToListAsync();
         }
 
-        public async Task<Review?> PostMovieReviewAsync(Guid movieId, ReviewRequestDto newReview)
+        public async Task<Review?> PostMovieReviewAsync(Guid movieId, ReviewRequestDto reviewRequest)
         {
             var movie = await _context.Movies.FindAsync(movieId);
             if (movie == null) return null;
 
-            var review = newReview.CreateReview(movieId);
+            var review = reviewRequest.ToReviewRequest(movieId);
             review.MovieTitle = movie.Title;
             await _context.Reviews.AddAsync(review);
             await _context.SaveChangesAsync();
@@ -53,6 +53,7 @@ namespace MovieApi.Repository
 
             review.Rating = updateReview.Rating;
             review.Content = updateReview.Content;
+            review.UpdatedOn = DateTime.Now;
             await _context.SaveChangesAsync();
 
             return review;

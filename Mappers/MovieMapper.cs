@@ -11,26 +11,29 @@ namespace MovieApi.Mappers
 {
     public static class MovieMapper
     {
-        public static Movie CreateMovie(this MovieRequestDto movieDto)
+        public static Movie ToMovieRequest(this MovieRequest movieRequest)
         {
             return new Movie
             {
-                Title = movieDto.Title.Trim(),
-                Description = movieDto.Description,
-                Genre = movieDto.Genre
+                Title = movieRequest.Title.Trim(),
+                Description = movieRequest.Description,
+                Genre = movieRequest.Genre,
+                CreatedOn = DateTime.Now,
             };
         }
 
-        public static MovieResponseDto ReadMovie(this Movie movie)
+        public static MovieResponse ToMovieResponse(this Movie movie)
         {
-            return new MovieResponseDto
+            return new MovieResponse
             {
                 Id = movie.Id,
+                CoverImage = movie.CoverImage,
                 Title = movie.Title,
-                Description = movie.Description,
+                Url = movie.Url,
                 Genre = movie.Genre,
+                Description = movie.Description,
                 ReleasedOn = movie.ReleasedOn.ToString().IsNullOrEmpty() ?  null : movie.ReleasedOn.ToString(),
-                Reviews = movie.Reviews.Select(r => r.ReadReview()).ToList(),
+                Reviews = movie.Reviews.Select(r => r.ToReviewResponse()).ToList(),
             };
         }
     }

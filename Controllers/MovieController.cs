@@ -31,7 +31,7 @@ namespace MovieApi.Controllers
         {
             var movies = await _movieRepo.GetAllAsync(query);
 
-            return Ok(movies.Select(m => m.ReadMovie()));
+            return Ok(movies.Select(m => m.ToMovieResponse()));
         }
 
         [HttpGet("{id}")]
@@ -41,12 +41,12 @@ namespace MovieApi.Controllers
             if (movie == null) return NotFound("Movie does not exist!");
 
 
-            return Ok(movie.ReadMovie());
+            return Ok(movie.ToMovieResponse());
         }
 
         // [Authorize]
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] MovieRequestDto newMovie)
+        public async Task<IActionResult> Post([FromBody] MovieRequest newMovie)
         {
             var movie = await _movieRepo.PostAsync(newMovie);
 
@@ -55,7 +55,7 @@ namespace MovieApi.Controllers
 
         // [Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, [FromBody] MovieRequestDto updateMovie)
+        public async Task<IActionResult> Update(Guid id, [FromBody] MovieRequest updateMovie)
         {
             var movie = await _movieRepo.UpdateAsync(id, updateMovie);
             if (movie == null) return NotFound("Movie does not exist!");
@@ -89,7 +89,7 @@ namespace MovieApi.Controllers
             var review = await _reviewRepo.GetMovieReviewAsync(id);
             if (review == null) return NotFound("Review does not exist");
 
-            return Ok(review.Select(r => r.ReadReview()));
+            return Ok(review.Select(r => r.ToReviewResponse()));
         }
 
         // [Authorize]
@@ -99,7 +99,7 @@ namespace MovieApi.Controllers
             var review = await _reviewRepo.PostMovieReviewAsync(id, newReview);
             if (review == null) return NotFound("Movie does not exist");
 
-            return CreatedAtAction("ReadMovieReview", new { id = review.Id }, review);
+            return CreatedAtAction("GetMovieReview", new { id = review.Id }, review);
         }
     }
 }

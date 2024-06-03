@@ -59,21 +59,24 @@ namespace MovieApi.Repository
             return movie;
         }
 
-        public async Task<Movie> PostAsync(MovieRequestDto newMovie)
+        public async Task<Movie> PostAsync(MovieRequest newMovie)
         {
-            var movie = newMovie.CreateMovie();
+            var movie = newMovie.ToMovieRequest();
             await _dbContext.Movies.AddAsync(movie);
             await _dbContext.SaveChangesAsync();
             return movie;
         }
-        public async Task<Movie?> UpdateAsync(Guid id, MovieRequestDto updateMovie)
+        public async Task<Movie?> UpdateAsync(Guid id, MovieRequest updateMovie)
         {
             var movie = await _dbContext.Movies.FindAsync(id);
             if (movie == null) return null;
 
             movie.Title = updateMovie.Title;
-            movie.Description = updateMovie.Description;
+            movie.CoverImage = updateMovie.CoverImage;
+            movie.Url = updateMovie.Url;
             movie.Genre = updateMovie.Genre;
+            movie.Description = updateMovie.Description;
+            movie.UpdatedOn = DateTime.Now.AddDays(1);
             await _dbContext.SaveChangesAsync();
             return movie;
         }
@@ -94,7 +97,8 @@ namespace MovieApi.Repository
             var movie = await _dbContext.Movies.FindAsync(id);
             if (movie == null) return null;
 
-            movie.ReleasedOn = DateTime.Now;
+            movie.ReleasedOn = DateTime.Now.AddMonths(2);
+            movie.UpdatedOn = DateTime.Now.AddMonths(2);
             await _dbContext.SaveChangesAsync();
             return movie;
         }

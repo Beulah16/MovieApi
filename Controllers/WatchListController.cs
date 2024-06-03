@@ -35,6 +35,7 @@ namespace MovieApi.Controllers
         {
             var user = await _user.FindByNameAsync(User.Identity.Name);
             if (user == null) return BadRequest("You're not a registered user");
+            Console.WriteLine(User);
 
             var userWatchlist = await _watchListRepo.GetWatchlistAsync(user);
 
