@@ -9,7 +9,7 @@ namespace MovieApi.Mappers
 {
     public static class SubscriptionMappers
     {
-        public static SubscriptionPlan ToPlanRequest (this SubscriptionRequest plan)
+        public static SubscriptionPlan ToPlanRequest (this PlanRequest plan)
         {
             return new SubscriptionPlan
             {

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -29,7 +30,13 @@ namespace MovieApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
         {
-            var movies = await _movieRepo.GetAllAsync(query);
+            var userName = User.Identity.Name;
+            if (userName == null) return NotFound("Register Or Login");
+
+            var user = await _user.FindByNameAsync(userName);
+            if (user == null) return NotFound("You're not a registered user!");
+
+            var movies = await _movieRepo.GetAllAsync(query, user);
 
             return Ok(movies.Select(m => m.ToMovieResponse()));
         }

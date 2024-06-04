@@ -11,11 +11,11 @@ namespace MovieApi.Interfaces
 {
     public interface IMovieRepo
     {
+        Task<List<Movie>> GetAllAsync(QueryObject query, User user);
         Task<Movie> PostAsync(MovieRequest newMovie);
-        Task<List<Movie>> GetAllAsync(QueryObject query);
         Task<Movie?> GetByIdAsync(Guid id);
         Task<Movie?> UpdateAsync(Guid id, MovieRequest newMovie);
         Task<Movie?> DeleteAsync(Guid id);
-        Task<Movie?> ReleaseAsync(Guid id);  
+        Task<Movie?> ReleaseAsync(Guid id);
     }
 }

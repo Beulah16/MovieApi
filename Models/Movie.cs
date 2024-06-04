@@ -18,6 +18,7 @@ namespace MovieApi.Models
         public DateTime? ReleasedOn { get; set; }
         public DateTime? CreatedOn { get; set; }
         public DateTime? UpdatedOn { get; set; }
+        public bool IsSubscribable { get; set; } = false;
         public List<Review> Reviews { get; set; } = new List<Review>();
         public List<WatchList> Watchlist { get; set; } = [];
 

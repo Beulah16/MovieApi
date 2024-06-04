@@ -191,6 +191,9 @@ namespace MovieApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsSubscribable")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime?>("ReleasedOn")
                         .HasColumnType("datetime2");
 
@@ -290,6 +293,9 @@ namespace MovieApi.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HasSubscribed")
                         .HasColumnType("bit");
 
                     b.Property<bool>("LockoutEnabled")

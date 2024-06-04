@@ -20,14 +20,9 @@ namespace MovieApi.Repository
         private readonly MovieDbContext _dbContext = dbContext;
 
 
-        public async Task<List<Movie>> GetAllAsync(QueryObject query)
+        public async Task<List<Movie>> GetAllAsync(QueryObject query, User user)
         {
             var movie = _dbContext.Movies.AsQueryable();
-            // var filterBy = query.FilterBy.HasValue;
-            // if (query.FilterBy != null)
-            {
-
-            }
 
             if (!string.IsNullOrWhiteSpace(query.Search))
             {
@@ -48,7 +43,10 @@ namespace MovieApi.Repository
             }
             movie = query.IsReleased.HasValue ? (query.IsReleased.Value ? movie.Where(m => m.ReleasedOn != null) : movie.Where(m => m.ReleasedOn == null)) : movie;
 
-            return await movie.ToListAsync();
+            if(user.HasSubscribed == false)
+                return await movie.Where(m => m.IsSubscribable == false).ToListAsync();
+            else
+                return await movie.ToListAsync();
         }
 
         public async Task<Movie?> GetByIdAsync(Guid id)

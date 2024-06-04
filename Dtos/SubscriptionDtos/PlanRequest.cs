@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace MovieApi.Dtos.SubscriptionDtos
 {
-    public class SubscriptionRequest
+    public class PlanRequest
     {
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;

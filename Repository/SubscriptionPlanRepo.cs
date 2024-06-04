@@ -23,13 +23,18 @@ namespace MovieApi.Repository
             return await _dbContext.SubscriptionPlans.ToListAsync();
         }
 
-        public async Task<SubscriptionPlan> PostPlanAsync(SubscriptionRequest request)
+        public async Task<SubscriptionPlan> PostPlanAsync(PlanRequest request)
         {
             var plan = request.ToPlanRequest();
             await _dbContext.SubscriptionPlans.AddAsync(plan);
             await _dbContext.SaveChangesAsync();
 
             return plan;
+        }
+
+        public Task<SubscriptionPlan> SubscribeAsync(User user)
+        {
+            throw new NotImplementedException();
         }
     }
 }
