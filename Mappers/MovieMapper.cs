@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.IdentityModel.Tokens;
 using MovieApi.Dtos;
 using MovieApi.Models;
 
@@ -16,8 +10,11 @@ namespace MovieApi.Mappers
             return new Movie
             {
                 Title = movieRequest.Title.Trim(),
-                Description = movieRequest.Description,
                 Genre = movieRequest.Genre,
+                Description = movieRequest.Description,
+                IsSubscribable = movieRequest.IsSubscribable,
+                CoverImage = movieRequest.CoverImage.Trim(),
+                Url = movieRequest.Url.Trim(),
                 CreatedOn = DateTime.Now,
             };
         }
@@ -27,12 +24,15 @@ namespace MovieApi.Mappers
             return new MovieResponse
             {
                 Id = movie.Id,
-                CoverImage = movie.CoverImage,
                 Title = movie.Title,
-                Url = movie.Url,
                 Genre = movie.Genre,
                 Description = movie.Description,
-                ReleasedOn = movie.ReleasedOn.ToString().IsNullOrEmpty() ?  null : movie.ReleasedOn.ToString(),
+                IsSubscribable = movie.IsSubscribable,
+                CoverImage = movie.CoverImage,
+                Url = movie.Url,
+                Trailer = movie.Trailer,
+                ReleasedOn = movie.ReleasedOn?.ToString(),
+                CreatedOn = movie.CreatedOn?.ToString(),
                 Reviews = movie.Reviews.Select(r => r.ToReviewResponse()).ToList(),
             };
         }

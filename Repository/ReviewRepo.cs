@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using MovieApi.Data;
 using MovieApi.Dtos;
@@ -31,7 +27,7 @@ namespace MovieApi.Repository
             if (movie == null) return null;
 
             var review = reviewRequest.ToReviewRequest(movieId);
-            review.MovieTitle = movie.Title;
+            
             await _context.Reviews.AddAsync(review);
             await _context.SaveChangesAsync();
 
@@ -52,7 +48,7 @@ namespace MovieApi.Repository
             if (review == null) return null;
 
             review.Rating = updateReview.Rating;
-            review.Content = updateReview.Content;
+            review.Comment = updateReview.Comment;
             review.UpdatedOn = DateTime.Now;
             await _context.SaveChangesAsync();
 

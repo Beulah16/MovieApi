@@ -1,18 +1,7 @@
-using System;
-using System.Collections.Generic;
-
-using System.Drawing.Text;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using MovieApi.Data;
 using MovieApi.Dtos;
 using MovieApi.Interfaces;
 using MovieApi.Mappers;
-using MovieApi.Models;
 
 namespace MovieApi.Controllers
 {

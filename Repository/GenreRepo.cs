@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using MovieApi.Data;
 using MovieApi.Dtos.GenreDtos;
@@ -12,14 +8,10 @@ using MovieApi.Models;
 
 namespace MovieApi.Repository
 {
-    public class GenreRepo : IGenreRepo
+    public class GenreRepo(MovieDbContext dbContext) : IGenreRepo
     {
-        private readonly MovieDbContext _dbContext;
+        private readonly MovieDbContext _dbContext = dbContext;
 
-        public GenreRepo(MovieDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
         public async Task<List<Genre>> GetAllAsync()
         {
             return await _dbContext.Genres.ToListAsync();
@@ -28,19 +20,19 @@ namespace MovieApi.Repository
         public async Task<GenreResponse?> GetByIdAsync(Guid Id)
         {
             var genre = await _dbContext.Genres.FindAsync(Id);
-            if (genre == null) return null;
-
-            return new GenreResponse
+      
+            return genre == null ? null : new GenreResponse
             {
                 Id = genre.Id,
-                Type = genre.Type,
-                Movies = _dbContext.Movies.Where(x => x.Genre.Contains(genre.Type)).Select(m => m.ToMovieResponse()).ToList()
+                Name = genre.Name,
+                Movies = _dbContext.Movies.Where(x => x.Genre.Contains(genre.Name)).Select(m => m.ToMovieResponse()).ToList()
             };
         }
 
         public async Task<Genre> PostAsync(GenreRequest genreDto)
         {
-            var genre = new Genre{Type = genreDto.Type};
+            var genre = new Genre{Name = genreDto.Name};
+
             await _dbContext.Genres.AddAsync(genre);
             await _dbContext.SaveChangesAsync();
 
@@ -51,9 +43,10 @@ namespace MovieApi.Repository
         {
             var genre = await _dbContext.Genres.FindAsync(Id);
             if (genre == null) return null;
-            genre.Type = genreDto.Type;
 
+            genre.Name = genreDto.Name;
             await _dbContext.SaveChangesAsync();
+            
             return genre;
         }
 

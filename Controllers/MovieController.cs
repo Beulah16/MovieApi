@@ -1,9 +1,8 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+
 using MovieApi.Dtos;
 using MovieApi.Helpers;
 using MovieApi.Interfaces;
@@ -14,26 +13,19 @@ namespace MovieApi.Controllers
 {
     [Route("api/movies")]
     [ApiController]
-    public class MovieController : ControllerBase
+    public class MovieController(IMovieRepo movieRepo, IReviewRepo reviewRepo, UserManager<User> user) : ControllerBase
     {
-        private readonly IMovieRepo _movieRepo;
-        private readonly IReviewRepo _reviewRepo;
-        private readonly UserManager<User> _user;
-        public MovieController(IMovieRepo movieRepo, IReviewRepo reviewRepo, UserManager<User> user)
-        {
-            _movieRepo = movieRepo;
-            _reviewRepo = reviewRepo;
-            _user = user;
-        }
-
+        private readonly IMovieRepo _movieRepo = movieRepo;
+        private readonly IReviewRepo _reviewRepo = reviewRepo;
+        private readonly UserManager<User> _user = user;
 
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
         {
-            var userName = User.Identity.Name;
-            if (userName == null) return NotFound("Register Or Login");
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null) return NotFound("Register Or Login");
 
-            var user = await _user.FindByNameAsync(userName);
+            var user = await _user.FindByIdAsync(userId);
             if (user == null) return NotFound("You're not a registered user!");
 
             var movies = await _movieRepo.GetAllAsync(query, user);
@@ -47,20 +39,19 @@ namespace MovieApi.Controllers
             var movie = await _movieRepo.GetByIdAsync(id);
             if (movie == null) return NotFound("Movie does not exist!");
 
-
             return Ok(movie.ToMovieResponse());
         }
 
-        // [Authorize]
+        [Authorize]
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] MovieRequest newMovie)
+        public async Task<IActionResult> Post([FromBody] MovieRequest request)
         {
-            var movie = await _movieRepo.PostAsync(newMovie);
+            var movie = await _movieRepo.PostAsync(request);
 
             return CreatedAtAction(nameof(GetById), new { id = movie.Id }, movie);
         }
 
-        // [Authorize]
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(Guid id, [FromBody] MovieRequest updateMovie)
         {
@@ -70,7 +61,7 @@ namespace MovieApi.Controllers
             return Ok(movie);
         }
 
-        // [Authorize]
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
@@ -80,7 +71,7 @@ namespace MovieApi.Controllers
             return Ok("Deleted!");
         }
 
-        // [Authorize]
+        [Authorize]
         [HttpPatch("{id}/release")]
         public async Task<IActionResult> ReleaseMovie(Guid id)
         {

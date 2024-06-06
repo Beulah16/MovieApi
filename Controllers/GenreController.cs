@@ -1,25 +1,20 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MovieApi.Data;
 using MovieApi.Dtos.GenreDtos;
 using MovieApi.Dtos.MovieDtos;
 using MovieApi.Interfaces;
-using MovieApi.Mappers;
 
 namespace MyApp.Namespace
 {
     [Route("api/genres")]
     [ApiController]
-    public class GenreController(IGenreRepo genreRepo, MovieDbContext dbContext) : ControllerBase
+    public class GenreController(IGenreRepo genreRepo) : ControllerBase
     {
         private readonly IGenreRepo _genreRepo = genreRepo;
-        private readonly MovieDbContext _dbContext = dbContext;
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var genre = await _genreRepo.GetAllAsync();
-            return Ok(genre);
+            return Ok(await _genreRepo.GetAllAsync());
         }
 
         [HttpGet("{id}")]
@@ -34,9 +29,7 @@ namespace MyApp.Namespace
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] GenreRequest genreDto)
         {
-            var genre = await _genreRepo.PostAsync(genreDto);
-
-            return Ok(genre);
+            return Ok(await _genreRepo.PostAsync(genreDto));
         }
 
         [HttpPut("{id}")]

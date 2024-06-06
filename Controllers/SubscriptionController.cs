@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MovieApi.Data;
-using MovieApi.Dtos.SubscriptionDtos;
 using MovieApi.Interfaces;
 using MovieApi.Models;
 
@@ -32,24 +27,31 @@ namespace MovieApi.Controllers
             return Ok(plan);
         }
 
-        [HttpPost("create")]
-        public async Task<IActionResult> PostPlan(PlanRequest request)
-        {
-            var plan = await _subRepo.PostPlanAsync(request);
-
-            return Ok(plan);
-        }
-
         [HttpPost("subscribe")]
         public async Task<IActionResult> Subscribe()
         {
-            var user = await _user.FindByNameAsync(User.Identity.Name);
+            var userName = User.Identity.Name;
+            if (userName == null) return NotFound("Login Or Register");
+
+            var user = await _user.FindByNameAsync(userName);
             if (user == null) return NotFound("You're not a registered user");
 
             user.HasSubscribed = true;
             await _dbContext.SaveChangesAsync();
 
             return Ok("Subscription successful");
+        }
+
+        [HttpDelete("cancel")]
+        public async Task<IActionResult> CancelSubscription()
+        {
+            var user = await _user.FindByNameAsync(User.Identity.Name);
+            if (user == null) return NotFound("You're not a registered user");
+
+            user.HasSubscribed = false;
+            await _dbContext.SaveChangesAsync();
+
+            return Ok("Subscription successfully cancelled");
         }
     }
 }

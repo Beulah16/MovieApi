@@ -1,10 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.EntityFrameworkCore;
 using MovieApi.Data;
 using MovieApi.Dtos;
@@ -41,9 +34,14 @@ namespace MovieApi.Repository
                     movie = query.IsDescending ? movie.OrderByDescending(m => m.Title) : movie.OrderBy(m => m.Title);
                 }
             }
-            movie = query.IsReleased.HasValue ? (query.IsReleased.Value ? movie.Where(m => m.ReleasedOn != null) : movie.Where(m => m.ReleasedOn == null)) : movie;
 
-            if(user.HasSubscribed == false)
+            movie = query.IsReleased.HasValue ? (
+                query.IsReleased.Value
+                ? movie.Where(m => m.ReleasedOn != null)
+                : movie.Where(m => m.ReleasedOn == null)
+            ) : movie;
+
+            if (!user.HasSubscribed)
                 return await movie.Where(m => m.IsSubscribable == false).ToListAsync();
             else
                 return await movie.ToListAsync();
@@ -51,37 +49,36 @@ namespace MovieApi.Repository
 
         public async Task<Movie?> GetByIdAsync(Guid id)
         {
-            var movie = await _dbContext.Movies.Include(r => r.Reviews).FirstOrDefaultAsync(x => x.Id == id);
-            if (movie == null) return null;
+            var movie = await _dbContext.Movies.Include(r => r.Reviews)
+                .FirstOrDefaultAsync(x => x.Id == id);
 
-            return movie;
+            return movie ?? null;
         }
 
-        public async Task<Movie> PostAsync(MovieRequest newMovie)
+        public async Task<Movie> PostAsync(MovieRequest request)
         {
-            var movie = newMovie.ToMovieRequest();
+            var movie = request.ToMovieRequest();
+
             await _dbContext.Movies.AddAsync(movie);
             await _dbContext.SaveChangesAsync();
+
             return movie;
         }
-        public async Task<Movie?> UpdateAsync(Guid id, MovieRequest updateMovie)
+
+        public async Task<Movie?> UpdateAsync(Guid id, MovieRequest request)
         {
-            var movie = await _dbContext.Movies.FindAsync(id);
+            var movie = await GetByIdAsync(id);
             if (movie == null) return null;
 
-            movie.Title = updateMovie.Title;
-            movie.CoverImage = updateMovie.CoverImage;
-            movie.Url = updateMovie.Url;
-            movie.Genre = updateMovie.Genre;
-            movie.Description = updateMovie.Description;
-            movie.UpdatedOn = DateTime.Now.AddDays(1);
+            UpdateMovie(movie, request);
             await _dbContext.SaveChangesAsync();
+
             return movie;
         }
 
         public async Task<Movie?> DeleteAsync(Guid id)
         {
-            var movie = await _dbContext.Movies.FindAsync(id);
+            var movie = await GetByIdAsync(id);
             if (movie == null) return null;
 
             _dbContext.Movies.Remove(movie);
@@ -92,13 +89,23 @@ namespace MovieApi.Repository
 
         public async Task<Movie?> ReleaseAsync(Guid id)
         {
-            var movie = await _dbContext.Movies.FindAsync(id);
+            var movie = await GetByIdAsync(id);
             if (movie == null) return null;
 
-            movie.ReleasedOn = DateTime.Now.AddMonths(2);
-            movie.UpdatedOn = DateTime.Now.AddMonths(2);
+            movie.ReleasedOn = DateTime.Now;
+            movie.UpdatedOn = DateTime.Now;
             await _dbContext.SaveChangesAsync();
             return movie;
+        }
+
+        private static void UpdateMovie(Movie movie, MovieRequest request)
+        {
+            movie.Title = request.Title;
+            movie.CoverImage = request.CoverImage;
+            movie.Url = request.Url;
+            movie.Genre = request.Genre;
+            movie.Description = request.Description;
+            movie.UpdatedOn = DateTime.Now.AddDays(1);
         }
     }
 }
