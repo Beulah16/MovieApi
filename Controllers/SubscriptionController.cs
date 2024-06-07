@@ -8,17 +8,12 @@ namespace MovieApi.Controllers
 {
     [Route("api/subscription/")]
     [ApiController]
-    public class SubscriptionController : ControllerBase
+    public class SubscriptionController(ISubscriptionPlanRepo subRepo, IAuthService authService, UserManager<User> user, MovieDbContext dbContext) : ControllerBase
     {
-        private readonly ISubscriptionPlanRepo _subRepo;
-        private readonly UserManager<User> _user;
-        private readonly MovieDbContext _dbContext;
-        public SubscriptionController(ISubscriptionPlanRepo subRepo, UserManager<User> user, MovieDbContext dbContext)
-        {
-            _subRepo = subRepo;
-            _user = user;
-            _dbContext = dbContext;
-        }
+        private readonly ISubscriptionPlanRepo _subRepo = subRepo;
+        private readonly UserManager<User> _user = user;
+        private readonly IAuthService _authService = authService;
+        private readonly MovieDbContext _dbContext = dbContext;
 
         [HttpGet("plans")]
         public async Task<IActionResult> GetPlans()
@@ -30,11 +25,9 @@ namespace MovieApi.Controllers
         [HttpPost("subscribe")]
         public async Task<IActionResult> Subscribe()
         {
-            var userName = User.Identity.Name;
-            if (userName == null) return NotFound("Login Or Register");
+            _authService.CheckIfAuthenticated(User);
 
-            var user = await _user.FindByNameAsync(userName);
-            if (user == null) return NotFound("You're not a registered user");
+            var user = await _authService.GetUserData(_authService.GetUserId(User));
 
             user.HasSubscribed = true;
             await _dbContext.SaveChangesAsync();
@@ -45,10 +38,11 @@ namespace MovieApi.Controllers
         [HttpDelete("cancel")]
         public async Task<IActionResult> CancelSubscription()
         {
-            var user = await _user.FindByNameAsync(User.Identity.Name);
-            if (user == null) return NotFound("You're not a registered user");
+            _authService.CheckIfAuthenticated(User);
 
-            user.HasSubscribed = false;
+            var user = await _authService.GetUserData(_authService.GetUserId(User));
+
+            user.HasSubscribed = true;
             await _dbContext.SaveChangesAsync();
 
             return Ok("Subscription successfully cancelled");

@@ -1,61 +1,53 @@
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using MovieApi.Data;
 using MovieApi.Interfaces;
-using MovieApi.Models;
 
 namespace MovieApi.Controllers
 {
     [Route("api/watchlist")]
     [ApiController]
-    public class WatchListController(UserManager<User> user, IWatchListRepo watchListRepo, MovieDbContext dbContext) : ControllerBase
+    public class WatchListController(
+        IWatchListRepo watchListRepo,
+        IAuthService authService,
+        IWatchlistService watchlistService,
+        IMovieService movieService
+        ) : ControllerBase
     {
-        private readonly UserManager<User> _user = user;
         private readonly IWatchListRepo _watchListRepo = watchListRepo;
-        private readonly MovieDbContext _dbContext = dbContext;
+        private readonly IAuthService _authService = authService;
+        private readonly IWatchlistService _watchlistService = watchlistService;
+        private readonly IMovieService _movieService = movieService;
 
         [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetWatchList()
         {
-            if (GetUserId().IsNullOrEmpty()) return BadRequest("You're not a registered user");
-            var userWatchlist = await _watchListRepo.GetWatchlistAsync(GetUserId());
+            _authService.CheckIfAuthenticated(User);
+            var userId = _authService.GetUserId(User);
 
-            return Ok(userWatchlist);
+            return Ok(await _watchListRepo.GetWatchlistAsync(userId));
         }
 
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateWatchList(Guid movieId)
         {
-            if (GetUserId().IsNullOrEmpty()) return BadRequest("You're not a registered user");
+            _authService.CheckIfAuthenticated(User);
+            var userId = _authService.GetUserId(User);
 
-            var movie = await _dbContext.Movies.FindAsync(movieId);
-            if (movie == null) return NotFound("Movie does not exist");
+            await _movieService.CheckifMovieExists(movieId);
+            await _watchlistService.CheckIfMovieAlreadyInWatchlist(userId, movieId);
 
-            var userWatchlist = await _watchListRepo.GetWatchlistAsync(GetUserId());
-            if (userWatchlist?.Any(x => x.Id == movieId) == true) return BadRequest("Movie already exists in the watchlist");
-
-            return Ok(await _watchListRepo.CreateAsync(GetUserId(), movieId));
+            return Ok(await _watchListRepo.CreateAsync(userId, movieId));
         }
 
         [Authorize]
         [HttpDelete]
         public async Task<IActionResult> DeleteWatchlist(Guid watchListId)
         {
-            var deleted = await _watchListRepo.DeleteAsync(watchListId);
-            if (deleted == null) return NotFound("Movie does not exist in your watchlist");
+            await _watchListRepo.DeleteAsync(watchListId);
 
             return Ok("Removed from watchlist!");
-        }
-
-        private string GetUserId()
-        {
-            return User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
         }
     }
 }

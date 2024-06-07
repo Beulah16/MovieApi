@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MovieApi.Data;
 using MovieApi.Dtos;
+using MovieApi.Exceptions;
 using MovieApi.Interfaces;
 using MovieApi.Mappers;
 using MovieApi.Models;
@@ -11,17 +12,18 @@ namespace MovieApi.Repository
     {
         private readonly MovieDbContext _context = context;
         public async Task<List<WatchListResponse>?> GetWatchlistAsync(string userId)
-        {            
+        {
             return await _context.WatchLists.Where(watchList => watchList.UserId == userId)
-            .Select(watchList => new WatchListResponse {
+            .Select(watchList => new WatchListResponse
+            {
                 Id = watchList.Id,
-                Movie = watchList.Movie.ToMovieResponse()
+                Movie = watchList.Movie != null ? watchList.Movie.ToMovieResponse() : null,
             }).ToListAsync();
         }
 
         public async Task<WatchList> CreateAsync(string userId, Guid movieId)
         {
-           var watchlist = new WatchList
+            var watchlist = new WatchList
             {
                 MovieId = movieId,
                 UserId = userId,
@@ -32,7 +34,7 @@ namespace MovieApi.Repository
             return watchlist;
         }
 
-         public async Task<WatchList?> GetWatchListByIdAsync(Guid watchListId)
+        public async Task<WatchList?> GetWatchListByIdAsync(Guid watchListId)
         {
             return await _context.WatchLists.FindAsync(watchListId);
         }
@@ -40,13 +42,22 @@ namespace MovieApi.Repository
 
         public async Task<WatchList?> DeleteAsync(Guid watchListId)
         {
-            var watchlist = await GetWatchListByIdAsync(watchListId);
-            if (watchlist == null) return null;
+            var watchlist = await GetWatchListByIdAsync(watchListId) ?? throw new MovieNotFoundException("Movie does not exist in your watchlist");
 
             _context.WatchLists.Remove(watchlist);
             await _context.SaveChangesAsync();
 
             return watchlist;
+        }
+
+        public async Task<bool> InWatchList(string userId, Guid movieId)
+        {
+            var watchList = await _context.WatchLists.Where(
+                watchList => watchList.UserId.Equals(userId)
+                && watchList.MovieId.Equals(movieId)
+            ).FirstAsync();
+
+            return watchList != null;
         }
     }
 }

@@ -1,3 +1,5 @@
 Migrations/
 obj/
 bin/
+# Program.cs
+appsettings.json

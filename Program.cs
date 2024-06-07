@@ -1,9 +1,12 @@
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MovieApi.Data;
 using MovieApi.Interfaces;
+using MovieApi.Middlewares;
 using MovieApi.Models;
 using MovieApi.Repository;
+using MovieApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,19 +35,26 @@ builder.Services.AddSwaggerGen(option =>
                     Id="Bearer"
                 }
             },
-            new string[]{}
+            Array.Empty<string>()
         }
     });
 });
-builder.Services.AddDbContext<MovieDbContext>(options =>{
+
+
+builder.Services.AddDbContext<MovieDbContext>(options =>
+{
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
 builder.Services.AddScoped<IMovieRepo, MovieRepo>();
 builder.Services.AddScoped<IReviewRepo, ReviewRepo>();
 builder.Services.AddScoped<IGenreRepo, GenreRepo>();
 builder.Services.AddScoped<IWatchListRepo, WatchListRepo>();
 builder.Services.AddScoped<ISubscriptionPlanRepo, SubscriptionPlanRepo>();
-;
+
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IMovieService, MovieService>();
+builder.Services.AddScoped<IWatchlistService, WatchlistService>();
 
 builder.Services.AddIdentityApiEndpoints<User>().AddEntityFrameworkStores<MovieDbContext>();
 builder.Services.AddAuthorization();
@@ -58,6 +68,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<CustomExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 app.MapControllers();

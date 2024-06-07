@@ -17,13 +17,10 @@ namespace MyApp.Namespace
             return Ok(await _genreRepo.GetAllAsync());
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<GenreResponse>> GetById(Guid id)
+        [HttpGet("{genreId}")]
+        public async Task<ActionResult<GenreResponse>> GetById(Guid genreId)
         {
-            var genreDto = await _genreRepo.GetByIdAsync(id);
-            if (genreDto == null) return NotFound("Genre does not exist");
-
-            return Ok(genreDto);
+            return Ok(await _genreRepo.GetByIdAsync(genreId));
         }
 
         [HttpPost]
@@ -32,20 +29,16 @@ namespace MyApp.Namespace
             return Ok(await _genreRepo.PostAsync(genreDto));
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, GenreRequest genreDto)
+        [HttpPut("{genreId}")]
+        public async Task<IActionResult> Update(Guid genreId, GenreRequest request)
         {
-            var genre = await _genreRepo.UpdateAsync(id, genreDto);
-            if (genre == null) return NotFound("Genre does not exist");
-
-            return Ok(genre);
+            return Ok(await _genreRepo.UpdateAsync(genreId, request));
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
+        [HttpDelete("{genreId}")]
+        public async Task<IActionResult> Delete(Guid genreId)
         {
-            var genre = await _genreRepo.DeleteAsync(id);
-            if (genre == null) return NotFound("Genre does not exist");
+            await _genreRepo.DeleteAsync(genreId);
 
             return Ok("Deleted");
         }

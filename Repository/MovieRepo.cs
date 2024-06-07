@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MovieApi.Data;
 using MovieApi.Dtos;
+using MovieApi.Exceptions;
 using MovieApi.Helpers;
 using MovieApi.Interfaces;
 using MovieApi.Mappers;
@@ -47,12 +48,12 @@ namespace MovieApi.Repository
                 return await movie.ToListAsync();
         }
 
-        public async Task<Movie?> GetByIdAsync(Guid id)
+        public async Task<Movie?> GetByIdAsync(Guid movieId)
         {
-            var movie = await _dbContext.Movies.Include(r => r.Reviews)
-                .FirstOrDefaultAsync(x => x.Id == id);
+            var movie = await _dbContext.Movies.Include(movie => movie.Reviews)
+                .FirstOrDefaultAsync(movie => movie.Id == movieId);
 
-            return movie ?? null;
+            return movie ?? throw new MovieNotFoundException("Movie does not exist!");
         }
 
         public async Task<Movie> PostAsync(MovieRequest request)
@@ -68,10 +69,12 @@ namespace MovieApi.Repository
         public async Task<Movie?> UpdateAsync(Guid id, MovieRequest request)
         {
             var movie = await GetByIdAsync(id);
-            if (movie == null) return null;
 
-            UpdateMovie(movie, request);
-            await _dbContext.SaveChangesAsync();
+            if (movie != null)
+            {
+                UpdateMovie(movie, request);
+                await _dbContext.SaveChangesAsync();
+            }
 
             return movie;
         }
@@ -79,10 +82,12 @@ namespace MovieApi.Repository
         public async Task<Movie?> DeleteAsync(Guid id)
         {
             var movie = await GetByIdAsync(id);
-            if (movie == null) return null;
 
-            _dbContext.Movies.Remove(movie);
-            await _dbContext.SaveChangesAsync();
+            if (movie != null)
+            {
+                _dbContext.Movies.Remove(movie);
+                await _dbContext.SaveChangesAsync();
+            }
 
             return movie;
         }
@@ -90,11 +95,14 @@ namespace MovieApi.Repository
         public async Task<Movie?> ReleaseAsync(Guid id)
         {
             var movie = await GetByIdAsync(id);
-            if (movie == null) return null;
 
-            movie.ReleasedOn = DateTime.Now;
-            movie.UpdatedOn = DateTime.Now;
-            await _dbContext.SaveChangesAsync();
+            if (movie != null)
+            {
+                movie.ReleasedOn = DateTime.Now;
+                movie.UpdatedOn = DateTime.Now;
+                await _dbContext.SaveChangesAsync();
+            }
+
             return movie;
         }
 
