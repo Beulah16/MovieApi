@@ -10,18 +10,21 @@ namespace MovieApi.Repository
     public class WatchListRepo(MovieDbContext context) : IWatchListRepo
     {
         private readonly MovieDbContext _context = context;
-        public async Task<List<MovieResponse>?> GetWatchlistAsync(User user)
+        public async Task<List<WatchListResponse>?> GetWatchlistAsync(string userId)
         {            
-            return await _context.WatchLists.Where(u => u.UserId == user.Id)
-            .Select(m => m.Movie.ToMovieResponse()).ToListAsync();
+            return await _context.WatchLists.Where(watchList => watchList.UserId == userId)
+            .Select(watchList => new WatchListResponse {
+                Id = watchList.Id,
+                Movie = watchList.Movie.ToMovieResponse()
+            }).ToListAsync();
         }
 
-        public async Task<WatchList> CreateAsync(User user, Guid movieId)
+        public async Task<WatchList> CreateAsync(string userId, Guid movieId)
         {
            var watchlist = new WatchList
             {
                 MovieId = movieId,
-                UserId = user.Id,
+                UserId = userId,
             };
             await _context.WatchLists.AddAsync(watchlist);
             await _context.SaveChangesAsync();
@@ -29,9 +32,15 @@ namespace MovieApi.Repository
             return watchlist;
         }
 
-        public async Task<WatchList?> DeleteAsync(User user, Guid movieId)
+         public async Task<WatchList?> GetWatchListByIdAsync(Guid watchListId)
         {
-            var watchlist = await _context.WatchLists.FirstOrDefaultAsync(u => u.UserId == user.Id && u.MovieId == movieId);
+            return await _context.WatchLists.FindAsync(watchListId);
+        }
+
+
+        public async Task<WatchList?> DeleteAsync(Guid watchListId)
+        {
+            var watchlist = await GetWatchListByIdAsync(watchListId);
             if (watchlist == null) return null;
 
             _context.WatchLists.Remove(watchlist);

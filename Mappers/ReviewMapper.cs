@@ -12,7 +12,7 @@ namespace MovieApi.Mappers
             {
                 MovieId = movieId,
                 Rating = review.Rating,
-                Content = review.Content,
+                Comment = review.Comment,
                 CreatedOn = DateTime.Now,
             };
         }
@@ -22,9 +22,9 @@ namespace MovieApi.Mappers
             return new ReviewResponseDto
             {
                 Id = review.Id,
-                MovieTitle = review.MovieTitle,
+                // MovieTitle = review.MovieTitle,
                 Rating = review.Rating,
-                Content = review.Content
+                Comment = review.Comment
             };
         }        
     }
