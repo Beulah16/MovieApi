@@ -25,6 +25,14 @@ namespace MovieApi.Middlewares
 
             switch (exception)
             {
+                case UnauthorizedAccessException ex:
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    return context.Response.WriteAsync(new ErrorDetails
+                    {
+                        StatusCode = context.Response.StatusCode,
+                        Message = ex.Message,
+                    }.ToString());
+
                 case UserNotAuthenticatedException ex:
                     context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                     return context.Response.WriteAsync(new ErrorDetails
@@ -42,6 +50,14 @@ namespace MovieApi.Middlewares
                     }.ToString());
 
                 case MovieNotFoundException ex:
+                    context.Response.StatusCode = StatusCodes.Status404NotFound;
+                    return context.Response.WriteAsync(new ErrorDetails
+                    {
+                        StatusCode = context.Response.StatusCode,
+                        Message = ex.Message
+                    }.ToString());
+
+                case ReviewNotFoundException ex:
                     context.Response.StatusCode = StatusCodes.Status404NotFound;
                     return context.Response.WriteAsync(new ErrorDetails
                     {

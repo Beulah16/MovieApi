@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MovieApi.Data;
@@ -41,16 +40,17 @@ builder.Services.AddSwaggerGen(option =>
 });
 
 
+var connectionString = builder.Configuration.GetConnectionString("MySql") ?? throw new InvalidOperationException("Connection string 'MYSQL' not found.");
 builder.Services.AddDbContext<MovieDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 
-builder.Services.AddScoped<IMovieRepo, MovieRepo>();
-builder.Services.AddScoped<IReviewRepo, ReviewRepo>();
-builder.Services.AddScoped<IGenreRepo, GenreRepo>();
-builder.Services.AddScoped<IWatchListRepo, WatchListRepo>();
-builder.Services.AddScoped<ISubscriptionPlanRepo, SubscriptionPlanRepo>();
+builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+builder.Services.AddScoped<IGenreRepository, GenreRepository>();
+builder.Services.AddScoped<IWatchListRepository, WatchListRepository>();
+builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IMovieService, MovieService>();

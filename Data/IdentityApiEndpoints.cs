@@ -48,7 +48,7 @@ public static class IdentityApiEndpointRouteBuilderExtensions
         var routeGroup = endpoints.MapGroup("");
 
         routeGroup.MapPost("/register", async Task<Results<Ok, ValidationProblem>>
-            ([FromBody] RegisterDto registration, HttpContext context, [FromServices] IServiceProvider sp) =>
+            ([FromBody] UserRegistrationRequest registration, HttpContext context, [FromServices] IServiceProvider sp) =>
         {
             var userManager = sp.GetRequiredService<UserManager<TUser>>();
 
@@ -93,7 +93,7 @@ public static class IdentityApiEndpointRouteBuilderExtensions
             signInManager.AuthenticationScheme = useCookieScheme ? IdentityConstants.ApplicationScheme : IdentityConstants.BearerScheme;
 
             var user = await userManager.FindByEmailAsync(login.Email);
-                
+
             if (user == null) return TypedResults.Problem("You're not a registered user.");
 
             var result = await signInManager.CheckPasswordSignInAsync(user, login.Password, lockoutOnFailure: false);
