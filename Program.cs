@@ -40,10 +40,10 @@ builder.Services.AddSwaggerGen(option =>
 });
 
 
-var connectionString = builder.Configuration.GetConnectionString("MySql") ?? throw new InvalidOperationException("Connection string 'MYSQL' not found.");
+// var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string not found.");
 builder.Services.AddDbContext<MovieDbContext>(options =>
 {
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
